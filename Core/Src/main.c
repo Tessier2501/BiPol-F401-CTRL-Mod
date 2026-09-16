@@ -274,7 +274,7 @@ static uint16_t filtered_voltage[4] = {0};
 
 void UpdateVoltageMeasurements(void) {
 
-    g_target_voltage_mv = (u_int16_t)(g_U/2.0f*1000.0f);
+    g_target_voltage_mv = (uint16_t)(g_U/2.0f*1000.0f);
 
     // Temperature Sensor Input. channel(PA3)
     g_temp = (uint16_t)(g_adc_buffer[0] * 3300.0f / 4096.0f); // <1500,fan on; >1700, fan off
@@ -536,7 +536,7 @@ uint32_t prev_cnt = INIT_VAL;  // Same initial value as g_cnt.
 uint64_t last_activity_time = 0; // Last activity timestamp
 uint64_t last_saving_time = 0;
 const uint64_t IDLE_TIMEOUT = 3000000; // Idle timeout: 3s
-const uint64_t SAVING_TIMEOUT = 1000000; // 1s
+const uint64_t SAVING_TIMEOUT = 2000000; // 2s
 // State machine handler
 void update_state_machine(void) {
     uint64_t current_time = Get_Global_Time_us();
@@ -881,7 +881,7 @@ int main(void)
     ShowWE1Duration(g_ch1,0);
     ShowCOOLDuration(g_cool,0);
     ShowWE2Duration(g_ch2,0);
-    ShowWeldingCurrent(4381);
+    ShowWeldingCurrent(5000);
     ShowSelectedButton(255);
 
 

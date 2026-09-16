@@ -242,11 +242,13 @@ void Draw_StaticText()
 {
     POINT_COLOR = WHITE;
     BACK_COLOR = BLACK;
-    LCD_ShowSongtiString2010(20,5,"FMAXCESW",0);
+    LCD_ShowSongtiString2010(20,5,"FM5000A",0);
     LCD_ShowSongtiString2010(340,5,"Cnt:",0);
 
     BACK_COLOR = GOLDEN_YELLOW;
+    POINT_COLOR = BLACK;
     LCD_ShowHeitiString2010(10, 41, "CH");
+    POINT_COLOR = WHITE;
 
     BACK_COLOR = DARK_RED_BROWN;
     LCD_ShowHeitiString2010(70,46,"WM");
@@ -457,7 +459,7 @@ void ShowWeldingMode(uint8_t mod,uint8_t editing)
 
 void ShowSelectedChannel(uint8_t g_idx, uint8_t editing)
 {
-    POINT_COLOR = WHITE;
+    POINT_COLOR = BLACK;
     BACK_COLOR = GOLDEN_YELLOW;
     if(editing)
     {
@@ -470,9 +472,10 @@ void ShowSelectedChannel(uint8_t g_idx, uint8_t editing)
     }
 
     char buffer[16];
-    POINT_COLOR = WHITE;
+    POINT_COLOR = BLACK;
     snprintf(buffer, sizeof(buffer), "%d", g_idx+1);
     LCD_ShowHeitiString2010(32, 41, buffer);
+    POINT_COLOR = WHITE;
 }
 
 void ShowSaving(uint8_t editing)
@@ -482,15 +485,18 @@ void ShowSaving(uint8_t editing)
     BACK_COLOR = DARK_RED_BROWN;
     if(editing)
     {
-        POINT_COLOR = RED;
-        LCD_ShowHeitiString2010(160,80,"SAVING...");
+        POINT_COLOR = GOLDEN_YELLOW;//BRIGHT_YELLOW;
+        // LCD_ShowHeitiString2010(160,80,"SAVING...");
+        // LCD_ShowHeitiString2412(160,80,"SAVING");
+        LCD_ShowSongtiString2814(140,80,"Saving...");
     }
     else
     {
         POINT_COLOR = BACK_COLOR;
-        LCD_ShowHeitiString2010(160,80,"SAVING...");
+        // LCD_ShowHeitiString2010(160,80,"SAVING...");
+        // LCD_ShowHeitiString2412(160,80,"SAVING");
+        LCD_ShowSongtiString2814(140,80,"Saving...");
     }
-
 }
 
 void initUI()

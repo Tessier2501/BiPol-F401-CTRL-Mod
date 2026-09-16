@@ -1024,7 +1024,18 @@ void LCD_ShowSongtiChar2814(uint16_t x, uint16_t y, char ch) {
         case '9': idx = 8; break;
         case '0': idx = 9; break;
         case '.': idx = 10; break;
-        case 'V': idx = 11; break;
+        case 'S': idx = 11; break;
+        case 'A': idx = 12; break;
+        case 'V': idx = 13; break;
+        case 'I': idx = 14; break;
+        case 'N': idx = 15; break;
+        case 'G': idx = 16; break;
+        case 's': idx = 17; break;
+        case 'a': idx = 18; break;
+        case 'v': idx = 19; break;
+        case 'i': idx = 20; break;
+        case 'n': idx = 21; break;
+        case 'g': idx = 22; break;
         default: idx = 255; break; // 无效字符返回255
     }
     uint16_t temp;
