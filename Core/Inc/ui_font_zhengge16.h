@@ -7,8 +7,8 @@
  * font sha256 : 6ad8293221be772e8eb778a9ba1eb7f45327c8956de892ce35fedf40cdae7269
  * render size : 16px, threshold 128
  * cell        : height 16px, baseline row 14px
- * glyphs      : 4 (CJK 4, ASCII 0)
- * bitmap bytes: 128
+ * glyphs      : 7 (CJK 7, ASCII 0)
+ * bitmap bytes: 224
  *
  * Bitmap layout: per glyph, height rows; row bytes = ceil(width/8);
  * LSB first (bit 0 = leftmost pixel). POINT/BACK colours are chosen at draw time.
@@ -22,8 +22,8 @@
 #define UI_FONT_ZHENGGE16_HAS_ASCII 0
 #define UI_FONT_ZHENGGE16_HEIGHT 16
 #define UI_FONT_ZHENGGE16_BASELINE 14
-#define UI_FONT_ZHENGGE16_COUNT 4
-#define UI_FONT_ZHENGGE16_BITMAP_BYTES 128
+#define UI_FONT_ZHENGGE16_COUNT 7
+#define UI_FONT_ZHENGGE16_BITMAP_BYTES 224
 
 extern const uint16_t ui_font_zhengge16_codepoints[UI_FONT_ZHENGGE16_COUNT];
 extern const uint8_t ui_font_zhengge16_widths[UI_FONT_ZHENGGE16_COUNT];

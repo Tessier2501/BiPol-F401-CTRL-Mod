@@ -1,5 +1,7 @@
 #include "ui.h"
 #include "stdio.h"
+#include "ui_font_noto24_labels.h"
+#include "ui_font_zhengge16_labels.h"
 
 void Draw_RoundedRectangleBody(u16 bbx, u16 bby)
 {
@@ -243,16 +245,15 @@ void Draw_StaticText()
     POINT_COLOR = WHITE;
     BACK_COLOR = BLACK;
     LCD_ShowSongtiString2010(20,5,"FM5000A",0);
-    LCD_ShowSongtiString2010(340,5,"Cnt:",0);
+    LCD_ShowZhengge16Label(348, 7, ui_label_count, UI_LABEL_COUNT_COUNT);
 
     BACK_COLOR = GOLDEN_YELLOW;
     POINT_COLOR = BLACK;
-    LCD_ShowHeitiString2010(10, 41, "CH");
+    LCD_ShowZhengge16Label(4, 42, ui_label_channel, UI_LABEL_CHANNEL_COUNT);
     POINT_COLOR = WHITE;
 
     BACK_COLOR = DARK_RED_BROWN;
-    LCD_ShowHeitiString2010(70,46,"WM");
-    LCD_ShowHeitiString2010(170,46,"U/V");
+    LCD_ShowHeitiString2010(151,46,"U/V");
     LCD_ShowHeitiString2010(280,46,"I/A");
 
     LCD_ShowSongtiString2010(387, 72, "C",0);
@@ -264,17 +265,18 @@ void Draw_StaticText()
     LCD_ShowSongtiString2010(390, 192, "V",0);
 
     BACK_COLOR = STEEL_BLUE;
-    LCD_ShowHeitiString2010(35, 228, "SQ");
-    LCD_ShowHeitiString2010(130, 228, "WE1");
-    LCD_ShowHeitiString2010(220, 228, "COOL");
-    LCD_ShowHeitiString2010(320, 228, "WE2");
-    LCD_ShowHeitiString2010(415, 228, "SOV");
+    POINT_COLOR = WHITE;
+    LCD_ShowNoto24Label(23, 226, ui_label_sq, UI_LABEL_SQ_COUNT);
+    LCD_ShowNoto24Label(107, 226, ui_label_we1, UI_LABEL_WE1_COUNT);
+    LCD_ShowNoto24Label(215, 226, ui_label_cool, UI_LABEL_COOL_COUNT);
+    LCD_ShowNoto24Label(299, 226, ui_label_we2, UI_LABEL_WE2_COUNT);
+    LCD_ShowNoto24Label(407, 226, ui_label_sov, UI_LABEL_SOV_COUNT);
 
-    LCD_ShowHeitiString2010(23, 283, "PARAM");
-    LCD_ShowHeitiString2010(130, 283, "MAN");
-    LCD_ShowHeitiString2010(219, 283, "AUTO");
-    LCD_ShowHeitiString2010(320, 283, "RCL");
-    LCD_ShowHeitiString2010(410, 283, "SAVE");
+    LCD_ShowNoto24Label(23, 280, ui_label_param, UI_LABEL_PARAM_COUNT);
+    LCD_ShowNoto24Label(119, 280, ui_label_man, UI_LABEL_MAN_COUNT);
+    LCD_ShowNoto24Label(215, 280, ui_label_auto, UI_LABEL_AUTO_COUNT);
+    LCD_ShowNoto24Label(311, 280, ui_label_rcl, UI_LABEL_RCL_COUNT);
+    LCD_ShowNoto24Label(407, 280, ui_label_save, UI_LABEL_SAVE_COUNT);
 }
 void ShowCnt(uint32_t cnt)
 {
@@ -324,7 +326,7 @@ void ShowSetVoltage(float v,uint8_t editing)
     snprintf(buffer, sizeof(buffer), "%.2f", v);
 
     BACK_COLOR = DARK_RED_BROWN;
-    LCD_ShowHeitiString2010(210,46,buffer);
+    LCD_ShowHeitiString2010(191,46,buffer);
 
     BACK_COLOR = CRIMSON_RED;
     if(editing)
@@ -440,20 +442,20 @@ void ShowWeldingMode(uint8_t mod,uint8_t editing)
     BACK_COLOR = DARK_RED_BROWN;
     if(editing)
     {
-        LCD_DrawRectangle(98, 44, 140, 66);
+        LCD_DrawRectangle(68, 46, 102, 64);
     }
     else
     {
         POINT_COLOR = BACK_COLOR;
-        LCD_DrawRectangle(98, 44, 140, 66);
+        LCD_DrawRectangle(68, 46, 102, 64);
     }
     POINT_COLOR = WHITE;
-    if(mod==0)//Manual
+    if(mod==0)
     {
-        LCD_ShowHeitiString2010(100,46,"MANL");
-    }else if(mod==1)//AUTO
+        LCD_ShowZhengge16Label(70, 48, ui_label_mode_man, UI_LABEL_MODE_MAN_COUNT);
+    }else if(mod==1)
     {
-        LCD_ShowHeitiString2010(100,46,"AUTO");
+        LCD_ShowZhengge16Label(70, 48, ui_label_mode_auto, UI_LABEL_MODE_AUTO_COUNT);
     }
 }
 
@@ -463,18 +465,18 @@ void ShowSelectedChannel(uint8_t g_idx, uint8_t editing)
     BACK_COLOR = GOLDEN_YELLOW;
     if(editing)
     {
-        LCD_DrawRectangle(30, 39, 44, 63);
+        LCD_DrawRectangle(38, 38, 49, 62);
     }
     else
     {
         POINT_COLOR = BACK_COLOR;
-        LCD_DrawRectangle(30, 39, 44, 63);
+        LCD_DrawRectangle(38, 38, 49, 62);
     }
 
     char buffer[16];
     POINT_COLOR = BLACK;
     snprintf(buffer, sizeof(buffer), "%d", g_idx+1);
-    LCD_ShowHeitiString2010(32, 41, buffer);
+    LCD_ShowHeitiString2010(39, 40, buffer);
     POINT_COLOR = WHITE;
 }
 

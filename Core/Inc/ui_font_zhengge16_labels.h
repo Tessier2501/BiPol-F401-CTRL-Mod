@@ -19,4 +19,12 @@ extern const uint8_t ui_label_channel[UI_LABEL_CHANNEL_COUNT];
 #define UI_LABEL_COUNT_COUNT 2
 extern const uint8_t ui_label_count[UI_LABEL_COUNT_COUNT];
 
+/* MODE_MAN: U+624B U+52A8 */
+#define UI_LABEL_MODE_MAN_COUNT 2
+extern const uint8_t ui_label_mode_man[UI_LABEL_MODE_MAN_COUNT];
+
+/* MODE_AUTO: U+81EA U+52A8 */
+#define UI_LABEL_MODE_AUTO_COUNT 2
+extern const uint8_t ui_label_mode_auto[UI_LABEL_MODE_AUTO_COUNT];
+
 #endif /* UI_FONT_ZHENGGE16_LABELS_H */

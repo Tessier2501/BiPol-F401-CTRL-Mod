@@ -110,4 +110,7 @@ void LCD_ShowSongtiString2814(uint16_t x, uint16_t y, const char *str);
 void LCD_ShowHeitiChar2814(uint16_t x, uint16_t y, char ch);
 void LCD_ShowHeitiString2814(uint16_t x, uint16_t y, const char *str);
 
+void LCD_ShowNoto24Label(uint16_t x, uint16_t y, const uint8_t *glyphs, uint8_t count);
+void LCD_ShowZhengge16Label(uint16_t x, uint16_t y, const uint8_t *glyphs, uint8_t count);
+
 #endif //ST7796_SPI_LCD_H

@@ -1,5 +1,7 @@
 #include "lcd.h"
 #include "font.h"
+#include "ui_font_noto24.h"
+#include "ui_font_zhengge16.h"
 #include "main.h"
 #include "gpio.h"
 #include "spi.h"
@@ -1112,4 +1114,90 @@ void LCD_ShowHeitiString2814(uint16_t x, uint16_t y, const char *str)
         current_x += 14;  // 每个字符宽度为10像素，根据实际情况调整
         str++;  // 移动到下一个字符
     }
+}
+
+/* -------------------------------------------------------------------------
+ * Generated UI font renderer.
+ * The generated fonts store one full glyph cell per entry: width x height,
+ * row-major, row bytes = ceil(width/8), LSB first. Every cell pixel is
+ * written (bit set -> POINT_COLOR, else BACK_COLOR), then the cursor advances
+ * by the per-glyph advance value.
+ * ------------------------------------------------------------------------- */
+#define LCD_UI_GLYPH_MAX_WIDTH   24
+#define LCD_UI_GLYPH_MAX_HEIGHT  24
+
+typedef struct
+{
+    const uint8_t  *widths;
+    const uint8_t  *advances;
+    const uint16_t *offsets;
+    const uint8_t  *bitmaps;
+    uint8_t count;
+    uint8_t height;
+} LCD_UiFont;
+
+static uint8_t s_ui_glyph_pixels[LCD_UI_GLYPH_MAX_WIDTH * LCD_UI_GLYPH_MAX_HEIGHT * 2];
+
+static const LCD_UiFont s_lcd_ui_font_noto24 =
+{
+    ui_font_noto24_widths,
+    ui_font_noto24_advances,
+    ui_font_noto24_offsets,
+    ui_font_noto24_bitmaps,
+    UI_FONT_NOTO24_COUNT,
+    UI_FONT_NOTO24_HEIGHT
+};
+
+static const LCD_UiFont s_lcd_ui_font_zhengge16 =
+{
+    ui_font_zhengge16_widths,
+    ui_font_zhengge16_advances,
+    ui_font_zhengge16_offsets,
+    ui_font_zhengge16_bitmaps,
+    UI_FONT_ZHENGGE16_COUNT,
+    UI_FONT_ZHENGGE16_HEIGHT
+};
+
+static void LCD_ShowUiGlyphRun(const LCD_UiFont *font, uint16_t x, uint16_t y,
+                               const uint8_t *glyphs, uint8_t count)
+{
+    for (uint8_t n = 0; n < count; n++)
+    {
+        uint8_t idx = glyphs[n];
+        if (idx >= font->count) continue;
+
+        uint8_t width = font->widths[idx];
+        uint8_t height = font->height;
+        uint8_t bytes_per_row = (uint8_t)((width + 7) >> 3);
+        const uint8_t *glyph_bitmaps = &font->bitmaps[font->offsets[idx]];
+        uint32_t buffer_index = 0;
+
+        for (uint8_t row = 0; row < height; row++)
+        {
+            const uint8_t *row_bits = &glyph_bitmaps[row * bytes_per_row];
+            for (uint8_t column = 0; column < width; column++)
+            {
+                uint16_t color = (row_bits[column >> 3] >> (column & 7)) & 1
+                                 ? POINT_COLOR : BACK_COLOR;
+                s_ui_glyph_pixels[buffer_index++] = (uint8_t)(color >> 8);
+                s_ui_glyph_pixels[buffer_index++] = (uint8_t)(color & 0xFF);
+            }
+        }
+
+        LCD_Set_Window(x, y, width, height);
+        LCD_WR_REG(lcddev.wramcmd);
+        LCD_WR_DATA_BULK(s_ui_glyph_pixels, buffer_index);
+
+        x += font->advances[idx];
+    }
+}
+
+void LCD_ShowNoto24Label(uint16_t x, uint16_t y, const uint8_t *glyphs, uint8_t count)
+{
+    LCD_ShowUiGlyphRun(&s_lcd_ui_font_noto24, x, y, glyphs, count);
+}
+
+void LCD_ShowZhengge16Label(uint16_t x, uint16_t y, const uint8_t *glyphs, uint8_t count)
+{
+    LCD_ShowUiGlyphRun(&s_lcd_ui_font_zhengge16, x, y, glyphs, count);
 }
