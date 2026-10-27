@@ -246,6 +246,7 @@ void Draw_StaticText()
     BACK_COLOR = BLACK;
     LCD_ShowSongtiString2010(20,5,"FM5000A",0);
     LCD_ShowZhengge16Label(348, 7, ui_label_count, UI_LABEL_COUNT_COUNT);
+    LCD_ShowSongtiChar2010(379, 4, ':', 0);
 
     BACK_COLOR = GOLDEN_YELLOW;
     POINT_COLOR = BLACK;
