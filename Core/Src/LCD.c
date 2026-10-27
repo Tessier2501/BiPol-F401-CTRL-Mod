@@ -533,6 +533,50 @@ void LCD_Fill(u16 sx, u16 sy, u16 ex, u16 ey, u16 color)
 
 }
 
+//启动屏/图像写入：设置窗口并保持片选有效，直到 LCD_ImageEnd
+void LCD_ImageBegin(uint16_t sx, uint16_t sy, uint16_t width, uint16_t height)
+{
+    LCD_Set_Window(sx, sy, width, height);
+    LCD_WR_REG(lcddev.wramcmd);
+    HAL_GPIO_WritePin(LCD_DC_PORT, LCD_DC_PIN, GPIO_PIN_SET);   // DC=1
+    HAL_GPIO_WritePin(LCD_CS_PORT, LCD_CS_PIN, GPIO_PIN_RESET); // CS=0
+}
+
+//在 LCD_ImageBegin 与 LCD_ImageEnd 之间写入 count 个同色像素
+void LCD_ImageWriteColor(uint16_t color, uint16_t count)
+{
+    #define IMAGE_CHUNK_PIXELS  (1024)
+    static uint8_t image_buffer[IMAGE_CHUNK_PIXELS * 2];
+    uint32_t remaining = count;
+    uint32_t chunk;
+    uint32_t prefill;
+    uint32_t i;
+
+    if(count == 0)
+    {
+        return;
+    }
+
+    prefill = (count > IMAGE_CHUNK_PIXELS) ? IMAGE_CHUNK_PIXELS : count;
+    for(i = 0; i < prefill; i++)
+    {
+        image_buffer[i*2] = (color >> 8) & 0xFF;
+        image_buffer[i*2 + 1] = color & 0xFF;
+    }
+
+    while(remaining > 0)
+    {
+        chunk = (remaining > IMAGE_CHUNK_PIXELS) ? IMAGE_CHUNK_PIXELS : remaining;
+        HAL_SPI_Transmit(&LCD_SPI, image_buffer, chunk * 2, HAL_MAX_DELAY);
+        remaining -= chunk;
+    }
+}
+
+void LCD_ImageEnd(void)
+{
+    HAL_GPIO_WritePin(LCD_CS_PORT, LCD_CS_PIN, GPIO_PIN_SET);   // CS=1
+}
+
 //清屏函数
 //color:要清屏的填充色
 void LCD_Clear(uint16_t color)

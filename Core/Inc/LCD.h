@@ -81,6 +81,11 @@ void LCD_ShowNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size);
 void LCD_DrawLine(u16 x1, u16 y1, u16 x2, u16 y2);
 void LCD_DrawRectangle(u16 x1, u16 y1, u16 x2, u16 y2);
 void LCD_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u16 color);
+
+void LCD_ImageBegin(uint16_t sx, uint16_t sy, uint16_t width, uint16_t height);
+void LCD_ImageWriteColor(uint16_t color, uint16_t count);
+void LCD_ImageEnd(void);
+
 void LCD_Display_Off();
 void LCD_Display_On();
 

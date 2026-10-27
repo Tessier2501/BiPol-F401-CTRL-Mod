@@ -34,6 +34,7 @@
 #include "flash_store.h"
 #include "debug_printf.h"
 #include "ui.h"
+#include "boot_splash.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -811,10 +812,15 @@ int main(void)
     LCD_Init();
     LCD_Display_Dir(USE_LCM_DIR); //Screen orientation
     LCD_Clear(BLACK);
-//    LCD_Turn_On_Backlight();
+    LCD_Display_On();
+
+    if(BootSplash_Show())
+    {
+        HAL_Delay(BOOT_SPLASH_DURATION_MS);
+        LCD_Clear(BLACK);
+    }
 
     initUI();
-    LCD_Display_On();
 
     if(FlashStore_GetLatest(&g_dataCfg))
     {
