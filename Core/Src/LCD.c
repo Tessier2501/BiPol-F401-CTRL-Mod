@@ -148,125 +148,9 @@ void LCD_Set_Window(uint16_t sx,uint16_t sy,uint16_t width,uint16_t height)
 
 }
 
-//在指定位置显示一个字符
-//x,y:起始坐标
-//num:要显示的字符:" "--->"~"
-//size:字体大小 12/16/24
-//mode:叠加方式(1)还是非叠加方式(0)
-void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint8_t size,uint8_t mode)
-{
-    uint8_t temp,t1,t;
-    uint16_t y0=y;
-    uint8_t csize=(size/8+((size%8)?1:0))*(size/2);		//得到字体一个字符对应点阵集所占的字节数
-    num=num-' ';//得到偏移后的值（ASCII字库是从空格开始取模，所以-' '就是对应字符的字库）
-    for(t=0;t<csize;t++)
-    {
-        if(size==16)temp=asc2_1608[num][t];	//调用1608字体
-        else if(size==24)
-        {
-            //temp=asc2_2412[num][t];	//调用2412字体
-        }
-        else return;								//没有的字库
-        for(t1=0;t1<8;t1++)
-        {
-            if(temp&0x80)LCD_Fast_DrawPoint(x,y,POINT_COLOR);
-            else if(mode==0)LCD_Fast_DrawPoint(x,y,BACK_COLOR);
-            temp<<=1;
-            y++;
-            if(y>=lcddev.height)return;		//超区域了
-            if((y-y0)==size)
-            {
-                y=y0;
-                x++;
-                if(x>=lcddev.width)return;	//超区域了
-                break;
-            }
-        }
-    }
-}
-
-
-//显示汉字或者字符串
-void Show_Str(uint16_t x, uint16_t y,uint8_t *str,uint8_t size,uint8_t mode)
-{
-    uint16_t x0=x;
-    uint8_t bHz=0;     //字符或者中文
-    while(*str!=0)//数据未结束
-    {
-        if(!bHz)
-        {
-            if(x>(lcddev.width-size/2)||y>(lcddev.height-size))
-                return;
-            if(*str>0x80)bHz=1;//中文
-            else              //字符
-            {
-                if(*str==0x0D)//换行符号
-                {
-                    y+=size;
-                    x=x0;
-                    str++;
-                }
-                else
-                {
-                    if(size>=24)//字库中没有集成12X24 16X32的英文字体,用8X16代替
-                    {
-                        LCD_ShowChar(x,y,*str,24,mode);
-                        x+=12; //字符,为全字的一半
-                    }
-                    else
-                    {
-                        LCD_ShowChar(x,y,*str,size,mode);
-                        x+=size/2; //字符,为全字的一半
-                    }
-                }
-                str++;
-
-            }
-        }
-    }
-}
-
 #define u32 uint32_t
 #define u8 uint8_t
 #define u16 uint16_t
-
-
-//m^n函数
-//返回值:m^n次方.
-u32 LCD_Pow(u8 m,u8 n)
-{
-    u32 result=1;
-    while(n--)result*=m;
-    return result;
-}
-
-//显示数字,高位为0,则不显示
-//x,y :起点坐标
-//len :数字的位数
-//size:字体大小
-//color:颜色
-//num:数值(0~4294967295);
-void LCD_ShowNum(u16 x,u16 y,u32 num,u8 len,u8 size)
-{
-    u8 t,temp;
-    u8 enshow=0;
-    for(t=0;t<len;t++)
-    {
-        temp=(num/LCD_Pow(10,len-t-1))%10;
-        if(enshow==0&&t<(len-1))
-        {
-            if(temp==0)
-            {
-                LCD_ShowChar(x+(size/2)*t,y,' ',size,0);
-                continue;
-            }else enshow=1;
-
-        }
-        LCD_ShowChar(x+(size/2)*t,y,temp+'0',size,0);
-    }
-}
-
-
 
 
 void LCD_Init(void) {
@@ -464,23 +348,6 @@ void LCD_DrawRectangle(u16 x1, u16 y1, u16 x2, u16 y2)
     LCD_DrawLine(x2,y1,x2,y2);
 }
 
-//在指定区域内填充指定颜色
-//区域大小:(xend-xsta+1)*(yend-ysta+1)
-//xsta
-//color:要填充的颜色
-void LCD_Fill_(u16 sx,u16 sy,u16 ex,u16 ey,u16 color)
-{
-    u16 i,j;
-    u16 xlen=0;
-    xlen=ex-sx+1;
-    for(i=sy;i<=ey;i++)
-    {
-        LCD_SetCursor(sx,i);      				//设置光标位置
-        LCD_WriteRAM_Prepare();     			//开始写入GRAM
-        for(j=0;j<xlen;j++)LCD_WriteRAM(color);	//设置光标位置
-    }
-}
-
 void LCD_Fill(u16 sx, u16 sy, u16 ex, u16 ey, u16 color)
 {
     u32 total_pixels = (ex - sx + 1) * (ey - sy + 1);
@@ -591,28 +458,6 @@ void LCD_Clear(uint16_t color)
 }
 
 
-// 显示浮点数，整数部分1-2位，小数部分1位
-void Show_Float(uint16_t x, uint16_t y, float value,uint8_t size,uint8_t mode)
-{
-    char buffer[10]; // 足够存放"xx.x"格式的数字
-
-    // 格式化为：整数部分最多2位，小数部分1位
-    sprintf(buffer, "%.1f", value);
-
-    Show_Str(x, y, buffer, size, mode);
-}
-
-// 显示浮点数，整数部分1位，小数部分2位
-void Show_Float_2(uint16_t x, uint16_t y, float value,uint8_t size,uint8_t mode)
-{
-    char buffer[10]; // 足够存放"xx.x"格式的数字
-
-    // 格式化为：整数部分最多2位，小数部分1位
-    sprintf(buffer, "%.2f", value);
-
-    Show_Str(x, y, buffer, size, mode);
-}
-
 //在指定位置画一个指定大小的圆
 //(x,y):中心点
 //r    :半径
@@ -664,70 +509,6 @@ void LCD_Draw_Circle(u16 x0,u16 y0,u8 r)
         // draw lines from inside (center)
         LCD_DrawLine(x0-x,y0+i,x0+x,y0+i);
         LCD_DrawLine(x0-x,y0-i,x0+x,y0-i);
-    }
-}
-
-void LCD_ShowHeitiChar2010_(uint16_t x, uint16_t y, char ch)
-{
-    uint8_t idx = 0;
-    switch(ch) {
-        case '0': idx = 0; break;
-        case '1': idx = 1; break;
-        case '2': idx = 2; break;
-        case '3': idx = 3; break;
-        case '4': idx = 4; break;
-        case '5': idx = 5; break;
-        case '6': idx = 6; break;
-        case '7': idx = 7; break;
-        case '8': idx = 8; break;
-        case '9': idx = 9; break;
-        case 'A': idx = 10; break;
-        case 'B': idx = 11; break;
-        case 'C': idx = 12; break;
-        case 'D': idx = 13; break;
-        case 'E': idx = 14; break;
-        case 'F': idx = 15; break;
-        case 'G': idx = 16; break;
-        case 'H': idx = 17; break;
-        case 'I': idx = 18; break;
-        case 'J': idx = 19; break;
-        case 'K': idx = 20; break;
-        case 'L': idx = 21; break;
-        case 'M': idx = 22; break;
-        case 'N': idx = 23; break;
-        case 'O': idx = 24; break;
-        case 'P': idx = 25; break;
-        case 'Q': idx = 26; break;
-        case 'R': idx = 27; break;
-        case 'S': idx = 28; break;
-        case 'T': idx = 29; break;
-        case 'U': idx = 30; break;
-        case 'V': idx = 31; break;
-        case 'W': idx = 32; break;
-        case 'X': idx = 33; break;
-        case 'Y': idx = 34; break;
-        case 'Z': idx = 35; break;
-        case '/': idx = 36; break;
-        case '.': idx = 37; break;
-        case ':': idx = 38; break;
-        default: idx = 255; break; // 无效字符返回255
-    }
-    uint16_t temp;
-    for(uint8_t i=0;i<20;i++)
-    {
-        temp = (Heiti_2010[idx][2 * i + 1] << 8) + (Heiti_2010[idx][2 * i]);
-        for(uint8_t j=0;j<10;j++)
-        {
-            if(temp&0x0001)
-            {
-                LCD_Fast_DrawPoint(x+j,y+i,POINT_COLOR);
-            }
-            else
-            {
-                LCD_Fast_DrawPoint(x+j,y+i,BACK_COLOR);
-            }
-            temp>>=1;
-        }
     }
 }
 

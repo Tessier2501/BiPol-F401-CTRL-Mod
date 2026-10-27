@@ -76,8 +76,6 @@ void LCD_Init(void);			   //初始化
 void LCD_Clear(uint16_t Color);	   //清屏
 void LCD_Display_Dir(uint8_t dir); //设置LCD显示方向
 void LCD_Turn_On_Backlight(void);
-void Show_Str(uint16_t x, uint16_t y,uint8_t *str,uint8_t size,uint8_t mode);//显示中文
-void LCD_ShowNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size);
 void LCD_DrawLine(u16 x1, u16 y1, u16 x2, u16 y2);
 void LCD_DrawRectangle(u16 x1, u16 y1, u16 x2, u16 y2);
 void LCD_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u16 color);
@@ -89,8 +87,6 @@ void LCD_ImageEnd(void);
 void LCD_Display_Off();
 void LCD_Display_On();
 
-void Show_Float(uint16_t x, uint16_t y, float value,uint8_t size,uint8_t mode);
-void Show_Float_2(uint16_t x, uint16_t y, float value,uint8_t size,uint8_t mode);
 
 void LCD_Draw_Circle(u16 x0,u16 y0,uint8_t r);
 void LCD_Draw_Ring(u16 x0, u16 y0, u16 r, u16 width);
