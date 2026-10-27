@@ -8,7 +8,6 @@ extern CRC_HandleTypeDef hcrc;
 // 当前状态
 static uint32_t current_version = 0;
 static uint32_t next_write_offset = 0;
-static bool sector_initialized = false;
 
 // 计算CRC32（使用硬件CRC）
 static uint32_t calculate_crc32(const data_packet_t *packet) {
@@ -100,15 +99,10 @@ void FlashStore_Init(void) {
         FlashStore_Format();
     }
 
-    sector_initialized = true;
 }
 
 // 保存数据
 bool FlashStore_Save(data_cfg_t dataCfg) {
-    if (!sector_initialized) {
-        FlashStore_Init();
-    }
-
     // 检查是否需要擦除（空间不足）
     if (next_write_offset + DATA_PACKET_SIZE > FLASH_SECTOR_SIZE) {
         printf("Sector full, formatting...\n");

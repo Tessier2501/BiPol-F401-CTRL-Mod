@@ -419,11 +419,6 @@ void LCD_ImageWriteColor(uint16_t color, uint16_t count)
     uint32_t prefill;
     uint32_t i;
 
-    if(count == 0)
-    {
-        return;
-    }
-
     prefill = (count > IMAGE_CHUNK_PIXELS) ? IMAGE_CHUNK_PIXELS : count;
     for(i = 0; i < prefill; i++)
     {
@@ -989,7 +984,6 @@ static void LCD_ShowUiGlyphRun(const LCD_UiFont *font, uint16_t x, uint16_t y,
     for (uint8_t n = 0; n < count; n++)
     {
         uint8_t idx = glyphs[n];
-        if (idx >= font->count) continue;
 
         uint8_t width = font->widths[idx];
         uint8_t height = font->height;
