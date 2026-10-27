@@ -124,7 +124,7 @@ void Draw_RoundedRectangleEdge(u16 bbx, u16 bby, u16 color)
 void Draw_RoundedRectangleCorner(u16 bbx,u16 bby, uint16_t color)
 {
     /*
-     * 圆角矩形的四个角，即非圆角的那些�?
+     * 圆角矩形的四个角（非圆弧部分）
      * */
     u16 bx,by;
     // 四角

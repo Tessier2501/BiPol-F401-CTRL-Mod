@@ -17,11 +17,11 @@
 // 数据包结构体
 #pragma pack(push, 1)  // 确保紧凑排列，无填充字节
 typedef struct {
-    uint32_t magic;         // 魔数标识：0xDEADBEEF
+    uint32_t magic;         // 魔数标识：MAGIC_NUMBER（314159）
     uint32_t version;       // 版本号：1, 2, 3, ...
     uint32_t crc32;         // CRC32校验值
 
-    // 8个u32数据
+    // 5 组参数数组（u/psqr/ch1/cool/ch2，各 5 个通道，共 25 个 u32）
     uint32_t u[5];
     uint32_t psqr[5];
     uint32_t ch1[5];

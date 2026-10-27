@@ -959,7 +959,7 @@ void LCD_ShowSongtiString1206(uint16_t x, uint16_t y, const char *str)
     // 遍历字符串中的每个字符
     while (*str != '\0') {
         LCD_ShowSongtiChar1206(current_x, y, *str);
-        current_x += 6;  // 每个字符宽度为10像素，根据实际情况调整
+        current_x += 6;  // 每个字符宽度为 6 像素
         str++;  // 移动到下一个字符
     }
 }
@@ -1007,7 +1007,7 @@ void LCD_ShowSongtiString1407(uint16_t x, uint16_t y, const char *str)
     // 遍历字符串中的每个字符
     while (*str != '\0') {
         LCD_ShowSongtiChar1407(current_x, y, *str);
-        current_x += 8;  // 每个字符宽度为10像素，根据实际情况调整
+        current_x += 8;  // 每个字符宽度为 8 像素
         str++;  // 移动到下一个字符
     }
 }
@@ -1062,7 +1062,7 @@ void LCD_ShowSongtiString2814(uint16_t x, uint16_t y, const char *str)
     // 遍历字符串中的每个字符
     while (*str != '\0') {
         LCD_ShowSongtiChar2814(current_x, y, *str);
-        current_x += 14;  // 每个字符宽度为10像素，根据实际情况调整
+        current_x += 14;  // 每个字符宽度为 14 像素
         str++;  // 移动到下一个字符
     }
 }
@@ -1111,7 +1111,7 @@ void LCD_ShowHeitiString2814(uint16_t x, uint16_t y, const char *str)
     // 遍历字符串中的每个字符
     while (*str != '\0') {
         LCD_ShowHeitiChar2814(current_x, y, *str);
-        current_x += 14;  // 每个字符宽度为10像素，根据实际情况调整
+        current_x += 14;  // 每个字符宽度为 14 像素
         str++;  // 移动到下一个字符
     }
 }

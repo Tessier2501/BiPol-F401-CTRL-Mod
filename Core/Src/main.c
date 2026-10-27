@@ -46,7 +46,7 @@ PUTCHAR_PROTOTYPE
 }
 #endif
 
-volatile uint32_t timer_overflow_count = 0;  // 溢出次数�????????????????32位扩展）
+volatile uint32_t timer_overflow_count = 0;  // 溢出次数（32 位计数器扩展为 64 位时间戳）
 
 uint64_t Get_Global_Time_us(void) {
     uint32_t overflow, counter;
@@ -54,7 +54,7 @@ uint64_t Get_Global_Time_us(void) {
         overflow = timer_overflow_count;
         counter = __HAL_TIM_GET_COUNTER(&htim2);
     } while (overflow != timer_overflow_count); // 无锁校验
-    return ((uint64_t)overflow<<32) | counter; // 组合�????????????????64位时间戳
+    return ((uint64_t)overflow<<32) | counter; // 组合 64 位时间戳
 }
 
 void didi()
@@ -186,7 +186,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-/* 系统状�?�枚�???????????? */
+/* 系统状态枚举 */
 typedef enum {
     STATE_INIT = 0,
     STATE_CHARGE,
@@ -198,7 +198,7 @@ typedef enum {
 /* 全局变量 */
 SystemState g_state = STATE_INIT;
 
-uint32_t g_adc_buffer[5];            // ADC采样缓冲�????????????
+uint32_t g_adc_buffer[5];            // ADC 采样缓冲
 uint16_t g_target_voltage_mv = 0;    // 目标电压 (mV)
 uint16_t g_cap_voltage_mv[4] = {0};  // 电容电压 (mV)
 uint16_t g_temp = 0;                 // 温度电压 (mv)
@@ -208,7 +208,7 @@ uint8_t value_updated = 0;
 
 
 
-WELDING_MODE g_weldingMode = 0; // 0:AMT,1: AUTO
+WELDING_MODE g_weldingMode = 0; // 0 = MANUAL（AMT_TRIG 手动触发），1 = AUTO（AUTO_TRIG 自动触发）
 uint32_t g_idx = 0;   // 1- 5
 float g_U = 9.2f;     // 0.2-12.0 v
 float g_psqr = 0.1f;  // 0.1-5.0 s
@@ -277,7 +277,7 @@ void UpdateVoltageMeasurements(void) {
     g_target_voltage_mv = (uint16_t)(g_U/2.0f*1000.0f);
 
     // Temperature Sensor Input. channel(PA3)
-    g_temp = (uint16_t)(g_adc_buffer[0] * 3300.0f / 4096.0f); // <1500,fan on; >1700, fan off
+    g_temp = (uint16_t)(g_adc_buffer[0] * 3300.0f / 4096.0f); // <1500 mV 风扇开；>1800 mV 风扇关
 
     // Four Capacitor Voltage Inputs. channel(PA4-PA7)
     for(int i = 0; i < 4; i++) {
@@ -531,7 +531,7 @@ typedef enum {
 
 // Global state variable
 State current_state = IDLE_MODE;
-uint8_t selected_index = 9;  // Currently selected variable index:0,1,2,3,4,5 6,7,8,9==> PSQR, CH1, COOL, CH2, SOV, SAVE, PARAM, AUTO, MAN, RCL
+uint8_t selected_index = 9;  // Selected button: 0 SQ, 1 WE1, 2 COOL, 3 WE2, 4 SOV, 5 SAVE, 6 RCL, 7 AUTO, 8 MAN, 9 SETUP; 255 = none
 uint32_t prev_cnt = INIT_VAL;  // Same initial value as g_cnt.
 uint64_t last_activity_time = 0; // Last activity timestamp
 uint64_t last_saving_time = 0;
