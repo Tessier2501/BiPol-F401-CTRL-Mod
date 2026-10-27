@@ -814,11 +814,9 @@ int main(void)
     LCD_Clear(BLACK);
     LCD_Display_On();
 
-    if(BootSplash_Show())
-    {
-        HAL_Delay(BOOT_SPLASH_DURATION_MS);
-        LCD_Clear(BLACK);
-    }
+    BootSplash_Show();
+    HAL_Delay(BOOT_SPLASH_DURATION_MS);
+    LCD_Clear(BLACK);
 
     initUI();
 
